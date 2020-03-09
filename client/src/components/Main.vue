@@ -10,13 +10,14 @@
 import Members from "./Members";
 import Texting from "./Texting";
 import Message from "./Message";
-import { members } from "../allMembers";
+// import { membersSeed } from "../allMembers";
 
 export default {
   name: "App",
   data() {
     return {
-      members,
+      // members: membersSeed,
+      members: this.$route.params.members,
       membersToText: []
     };
   },

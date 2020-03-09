@@ -29,6 +29,7 @@ export default {
 
 <style scoped>
 li {
+  text-transform: capitalize;
   background: rgb(122, 204, 255);
 }
 li:hover {

@@ -12,13 +12,9 @@
           <td>{{name}}</td>
           <td>{{phone}}</td>
         </tr>
-        <tr>
-          <td>Mary Fellow</td>
-          <td>12341234123</td>
-        </tr>
-        <tr>
-          <td>Katie Reynolds</td>
-          <td>12341234123</td>
+        <tr v-for="member in members" :key="member.phone">
+          <td>{{member.name}}</td>
+          <td>{{member.phone}}</td>
         </tr>
       </table>
     </section>
@@ -32,7 +28,8 @@ export default {
   data() {
     return {
       name: "",
-      phone: ""
+      phone: "",
+      members: this.$route.params.members
     };
   },
   components: { AddMember },

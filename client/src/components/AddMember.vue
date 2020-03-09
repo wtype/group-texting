@@ -1,7 +1,7 @@
 <template>
   <section>
     <h1>Add Member</h1>
-    <form>
+    <form @submit.prevent="addMember">
       <input name="name" v-model="name" type="text" placeholder="Name" maxlength="50" required />
       <input
         name="phone"
@@ -12,7 +12,7 @@
         minlength="10"
         required
       />
-      <button>Add Member</button>
+      <button type="submit">Add Member</button>
     </form>
   </section>
 </template>
@@ -22,7 +22,8 @@ export default {
   data() {
     return {
       name: "",
-      phone: ""
+      phone: "",
+      members: this.$route.params.members
     };
   },
   watch: {
@@ -33,7 +34,49 @@ export default {
       this.$emit("phoneChanged", value);
     }
   },
-  methods: {}
+  mounted() {
+    // this.loadDirectory();
+  },
+  methods: {
+    isNumber(input) {
+      const regex = /[0-9]/g;
+      const found = input.toString().match(regex);
+      if (found === null) {
+        return false;
+      }
+      if (found.length === input.length) {
+        return true;
+      }
+    },
+    addMember() {
+      const url = "http://localhost:9090/directory";
+
+      if (!this.isNumber(this.phone)) {
+        alert(
+          "Please enter a valid number: no characters, parantheses, or dashes"
+        );
+        return;
+      }
+
+      const info = {
+        name: this.name,
+        phone: this.phone
+      };
+
+      console.log(info.name, info.phone);
+      console.log(JSON.stringify(info));
+
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify(info),
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+        .then(response => console.log(response))
+        .catch(err => console.log(err));
+    }
+  }
 };
 </script>
 

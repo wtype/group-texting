@@ -11,6 +11,9 @@ const filter = new Filter();
 const db = new Datastore('texts.db');
 db.loadDatabase();
 
+const directory = new Datastore('directory.db');
+directory.loadDatabase();
+
 app.use(cors());
 app.use(express.json({ limit: '2kb' }));
 
@@ -27,6 +30,22 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/directory', (req, res) => {
+  directory
+    .find({})
+    .sort({ created: -1 })
+    .exec((err, data) => {
+      if (err) {
+        res.json({
+          error: 'Nothing in the directory! 😿',
+        });
+        res.end();
+        return;
+      }
+      res.json(data);
+    });
+});
+
 app.use(
   rateLimit({
     windowMs: 30e3,
@@ -34,7 +53,7 @@ app.use(
   })
 );
 
-function isValid(info) {
+function isValidText(info) {
   return (
     info.message &&
     info.message.toString().trim() !== '' &&
@@ -44,8 +63,17 @@ function isValid(info) {
   );
 }
 
+function isValidMember(info) {
+  return (
+    info.name &&
+    info.name.toString().trim() !== '' &&
+    info.phone &&
+    info.phone.toString().trim() !== ''
+  );
+}
+
 app.post('/send', (req, res) => {
-  if (isValid(req.body)) {
+  if (isValidText(req.body)) {
     const text = {
       message: filter.clean(req.body.message.toString()),
       members: req.body.members,
@@ -78,6 +106,22 @@ app.post('/send', (req, res) => {
   } else {
     res.status(422).json({
       message: 'Please provide valid text content and members',
+    });
+  }
+});
+
+app.post('/directory', (req, res) => {
+  if (isValidMember(req.body)) {
+    const member = {
+      name: filter.clean(req.body.name.toString().toLowerCase()),
+      phone: `+1${req.body.phone}`,
+      dateAdded: new Date(),
+      addedToText: false,
+    };
+    directory.insert(member);
+  } else {
+    res.status(422).json({
+      message: 'Please provide valid member information',
     });
   }
 });

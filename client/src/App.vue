@@ -4,10 +4,20 @@
       <nav>
         <ul>
           <li>
-            <router-link to="/">Message</router-link>
+            <router-link
+              :to="{ 
+                name: 'Home',
+                params: { members }     
+            }"
+            >Message</router-link>
           </li>
           <li>
-            <router-link to="/directory">Directory</router-link>
+            <router-link
+              :to="{ 
+                name: 'Directory',
+                params: { members }
+             }"
+            >Directory</router-link>
           </li>
         </ul>
       </nav>
@@ -17,7 +27,32 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      members: []
+    };
+  },
+  mounted() {
+    if (this.members.length < 1) {
+      this.loadMembers();
+    }
+  },
+  methods: {
+    loadMembers() {
+      const url = "http://localhost:9090/directory";
+      console.log("Directory loading");
+      fetch(url)
+        .then(response => response.json())
+        .then(members => {
+          members.forEach(member => {
+            this.members.push(member);
+          });
+        });
+      this.$forceUpdate();
+    }
+  }
+};
 </script>
 
 <style>
