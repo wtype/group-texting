@@ -1,65 +1,23 @@
 <template>
-  <main id="app">
-    <Members :members="members" @addMember="addMember" />
-    <Texting :membersToText="membersToText" @removeMember="removeMember" />
-    <Message :membersToText="membersToText" @sendMessage="sendMessage" />
+  <main>
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <router-link to="/">Message</router-link>
+          </li>
+          <li>
+            <router-link to="/directory">Directory</router-link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <router-view></router-view>
   </main>
 </template>
 
 <script>
-import Members from "./components/Members";
-import Texting from "./components/Texting";
-import Message from "./components/Message";
-import { members } from "./allMembers";
-
-export default {
-  name: "App",
-  data() {
-    return {
-      members,
-      membersToText: []
-    };
-  },
-  components: {
-    Members,
-    Texting,
-    Message
-  },
-  methods: {
-    addMember(member) {
-      if (this.membersToText.includes(member)) {
-        console.log("already added", member.name, "to the text");
-        return;
-      }
-      this.membersToText.push(member);
-    },
-    removeMember(member) {
-      const index = this.membersToText.indexOf(member);
-      this.membersToText.splice(index, 1);
-    },
-    sendMessage(message) {
-      const url = "http://localhost:9090/send";
-
-      const payload = {
-        message,
-        members: this.membersToText
-      };
-
-      fetch(url, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "content-type": "application/json"
-        }
-      })
-        .then(() => {})
-        .catch(err => console.log(err));
-
-      this.membersToText.forEach(member => (member.addedToText = false));
-      this.membersToText = [];
-    }
-  }
-};
+export default {};
 </script>
 
 <style>
@@ -78,21 +36,23 @@ export default {
   outline: none;
 }
 ::selection {
-  background: darkslategrey;
-  color: white;
+  background: rgb(152, 240, 255);
+  color: black;
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  padding: 5vw;
+  padding: 0 5vw 5vw 5vw;
   background: rgb(8, 10, 18);
-  margin: auto;
+  margin: 0 auto;
   max-width: 1500px;
+  overflow-x: hidden;
 }
 section {
   background: rgba(70, 70, 70, 0.15);
   margin-top: 4vw;
   padding: 4vw;
   border-radius: 0.02rem;
+  position: relative;
 }
 h1 {
   color: white;
@@ -113,6 +73,42 @@ li {
   cursor: pointer;
   transition: 110ms ease;
 }
+header ul {
+  justify-content: flex-end;
+}
+header ul li {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+header ul li a {
+  transition: 110ms ease;
+  padding: 2rem;
+  text-decoration: none;
+  color: rgb(128, 128, 128);
+}
+header ul li a:hover {
+  color: white;
+  background: rgba(70, 70, 70, 0.15);
+  box-shadow: 0px 0px 0px 3px rgba(40, 40, 40, 0.35);
+}
+.little {
+  border-radius: 0.02rem;
+  font-size: 1rem;
+  padding: 0.25rem 1rem;
+  position: absolute;
+  right: 0.68rem;
+  bottom: 0.68rem;
+  background: rgba(70, 70, 70, 0.35);
+  border: none;
+  color: rgb(128, 128, 128);
+  filter: brightness(1.5);
+  cursor: pointer;
+  transition: 110ms ease;
+}
+.little:hover {
+  filter: brightness(2);
+}
 @media (min-width: 1200px) {
   body {
     padding: 0 5vw;
@@ -124,6 +120,9 @@ li {
 @media (max-width: 650px) {
   :root {
     font-size: 11px;
+  }
+  button {
+    font-size: 1.5rem;
   }
 }
 </style>

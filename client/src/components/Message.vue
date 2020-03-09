@@ -71,7 +71,8 @@ button {
   border: none;
   font-size: 2rem;
   padding: 2rem 3rem;
-  margin-top: 4vw;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
   border-radius: 0.02rem;
   transition: 110ms ease;
 }

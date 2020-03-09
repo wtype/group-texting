@@ -9,6 +9,7 @@
         @click="addMemberToText(member)"
       >{{member.name}}</li>
     </ul>
+    <button class="little" @click="addAll">Add all</button>
   </section>
 </template>
 
@@ -22,6 +23,12 @@ export default {
     addMemberToText(member) {
       this.$emit("addMember", member);
       member.addedToText = true;
+    },
+    addAll() {
+      this.members.forEach(member => {
+        this.addMemberToText(member);
+        member.addedToText = true;
+      });
     }
   }
 };

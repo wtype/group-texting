@@ -8,6 +8,7 @@
         @click="removeMember(member)"
       >{{member.name}}</li>
     </ul>
+    <button class="little" @click="$emit('removeAll')">Remove all</button>
   </section>
 </template>
 
