@@ -24,6 +24,9 @@ yarn
 yarn serve
 ```
 
+![Screenshot - Vue Text App](/Screenshot.jpg)
+
+
 ## To Do
 
 - [x] Client started with Vue
@@ -40,5 +43,3 @@ yarn serve
 - [x] Routing
 - [ ] Authentication
 - [ ] Build / Deploy
-
-![Screenshot - Vue Text App](/Screenshot.jpg)
