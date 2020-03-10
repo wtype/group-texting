@@ -41,4 +41,4 @@ yarn serve
 - [ ] Authentication
 - [ ] Build / Deploy
 
-![Screenshot - Vue Text App](/group-texting-vue/master/Screenshot.jpg)
+![Screenshot - Vue Text App](/Screenshot.jpg)
