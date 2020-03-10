@@ -23,6 +23,7 @@
 
 <script>
 import AddMember from "./AddMember";
+import { eventBus } from "../main";
 
 export default {
   data() {
@@ -33,6 +34,11 @@ export default {
     };
   },
   components: { AddMember },
+  created() {
+    eventBus.$on("membersLoaded", members => {
+      this.members = members;
+    });
+  },
   methods: {
     nameChanged(value) {
       this.name = value;
@@ -55,6 +61,7 @@ table {
 th,
 td,
 tr {
+  text-transform: capitalize;
   padding: 0.65rem;
   text-align: left;
   font-size: 1.5rem;

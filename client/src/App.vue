@@ -27,11 +27,19 @@
 </template>
 
 <script>
+import { eventBus } from "./main";
+
 export default {
   data() {
     return {
       members: []
     };
+  },
+  created() {
+    eventBus.$on("newMember", data => {
+      console.log("HERE!", data);
+      this.loadMembers();
+    });
   },
   mounted() {
     if (this.members.length < 1) {
@@ -49,7 +57,7 @@ export default {
             this.members.push(member);
           });
         });
-      this.$forceUpdate();
+      eventBus.$emit("membersLoaded", this.members);
     }
   }
 };

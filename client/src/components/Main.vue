@@ -10,6 +10,7 @@
 import Members from "./Members";
 import Texting from "./Texting";
 import Message from "./Message";
+import { eventBus } from "../main";
 // import { membersSeed } from "../allMembers";
 
 export default {
@@ -25,6 +26,11 @@ export default {
     Members,
     Texting,
     Message
+  },
+  created() {
+    eventBus.$on("membersLoaded", members => {
+      this.members = members;
+    });
   },
   methods: {
     addMember(member) {

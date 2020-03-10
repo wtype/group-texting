@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { eventBus } from "../main";
+
 export default {
   data() {
     return {
@@ -33,9 +35,6 @@ export default {
     phone(value) {
       this.$emit("phoneChanged", value);
     }
-  },
-  mounted() {
-    // this.loadDirectory();
   },
   methods: {
     isNumber(input) {
@@ -73,8 +72,11 @@ export default {
           "content-type": "application/json"
         }
       })
-        .then(response => console.log(response))
+        .then(response => response)
         .catch(err => console.log(err));
+
+      eventBus.$emit("newMember", info);
+      document.querySelector("form").reset();
     }
   }
 };
