@@ -46,6 +46,25 @@ app.get('/directory', (req, res) => {
     });
 });
 
+app.delete('/delete', (req, res) => {
+  const { id } = req.query;
+  if (id) {
+    directory.remove({ _id: id });
+    res.json({
+      message: 'Successfully removed',
+    });
+  } else {
+    res.status(404).json({
+      error: 'Entry not found',
+    });
+  }
+});
+
+// app.get('/', (req, res) => {
+//   const { id } = req.query;
+//   directory.update({ id })
+// });
+
 app.use(
   rateLimit({
     windowMs: 30e3,

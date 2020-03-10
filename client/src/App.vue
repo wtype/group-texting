@@ -39,7 +39,9 @@ export default {
     eventBus.$on("newMember", () => {
       this.loadMembers();
     });
-    eventBus.$on("membersLoaded", members => (this.members = members));
+    eventBus.$on("membersLoaded", members => {
+      this.members = members;
+    });
   },
   mounted() {
     if (this.members.length < 1) {

@@ -7,6 +7,7 @@
         <tr>
           <th>Name</th>
           <th>Phone</th>
+          <th id="remove">Remove</th>
         </tr>
         <tr v-if="name.length > 0 || phone.length > 0">
           <td>{{name}}</td>
@@ -15,6 +16,7 @@
         <tr v-for="member in members" :key="member.phone">
           <td>{{member.name}}</td>
           <td>{{member.phone}}</td>
+          <td v-if="member.dateAdded" class="remove" @click="removeMember($event, member)">╳</td>
         </tr>
       </table>
     </section>
@@ -45,6 +47,17 @@ export default {
     },
     phoneChanged(value) {
       this.phone = value;
+    },
+    removeMember(e, member) {
+      const id = member._id;
+      const url = `http://localhost:9090/delete/?id=${id}`;
+      fetch(url, {
+        method: "DELETE"
+      })
+        .then(() => {
+          eventBus.$emit("updateMembers", this.members);
+        })
+        .catch(err => console.log(err));
     }
   }
 };
@@ -78,5 +91,15 @@ th:after {
 tr:hover :not(th) {
   color: white;
   background: rgba(40, 40, 40, 0.65);
+}
+#remove {
+  width: 0;
+}
+.remove {
+  text-align: center;
+  cursor: pointer;
+}
+.remove:hover {
+  color: rgb(255, 80, 78);
 }
 </style>
