@@ -119,6 +119,7 @@ app.post('/directory', (req, res) => {
       addedToText: false,
     };
     directory.insert(member);
+    res.json(member);
   } else {
     res.status(422).json({
       message: 'Please provide valid member information',

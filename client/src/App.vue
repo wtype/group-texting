@@ -36,10 +36,10 @@ export default {
     };
   },
   created() {
-    eventBus.$on("newMember", data => {
-      console.log("HERE!", data);
+    eventBus.$on("newMember", () => {
       this.loadMembers();
     });
+    eventBus.$on("membersLoaded", members => (this.members = members));
   },
   mounted() {
     if (this.members.length < 1) {
@@ -49,10 +49,10 @@ export default {
   methods: {
     loadMembers() {
       const url = "http://localhost:9090/directory";
-      console.log("Directory loading");
       fetch(url)
         .then(response => response.json())
         .then(members => {
+          this.members.splice(0, this.members.length);
           members.forEach(member => {
             this.members.push(member);
           });

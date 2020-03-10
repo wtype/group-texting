@@ -4,7 +4,7 @@
     <ul>
       <li
         v-for="member in membersToText"
-        :key="member.name"
+        :key="member.phone"
         @click="removeMember(member)"
       >{{member.name}}</li>
     </ul>

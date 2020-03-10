@@ -5,7 +5,7 @@
       <li
         v-for="member in members"
         :class="member.addedToText ? 'added' : null"
-        :key="member.name"
+        :key="member.phone"
         @click="addMemberToText(member)"
       >{{member.name}}</li>
     </ul>

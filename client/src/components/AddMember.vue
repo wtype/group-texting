@@ -62,9 +62,6 @@ export default {
         phone: this.phone
       };
 
-      console.log(info.name, info.phone);
-      console.log(JSON.stringify(info));
-
       fetch(url, {
         method: "POST",
         body: JSON.stringify(info),
@@ -72,10 +69,14 @@ export default {
           "content-type": "application/json"
         }
       })
-        .then(response => response)
+        .then(response => response.json())
+        .then(result => {
+          eventBus.$emit("newMember", result);
+          this.name = "";
+          this.phone = "";
+        })
         .catch(err => console.log(err));
 
-      eventBus.$emit("newMember", info);
       document.querySelector("form").reset();
     }
   }
