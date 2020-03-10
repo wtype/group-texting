@@ -13,10 +13,10 @@
           <td>{{name}}</td>
           <td>{{phone}}</td>
         </tr>
-        <tr v-for="member in members" :key="member.phone">
+        <tr v-for="(member, index) in members" :index="index" :key="member.phone">
           <td>{{member.name}}</td>
           <td>{{member.phone}}</td>
-          <td v-if="member.dateAdded" class="remove" @click="removeMember($event, member)">╳</td>
+          <td v-if="member.dateAdded" class="remove" @click="removeMember(member, index)">╳</td>
         </tr>
       </table>
     </section>
@@ -48,8 +48,10 @@ export default {
     phoneChanged(value) {
       this.phone = value;
     },
-    removeMember(e, member) {
+    removeMember(member, index) {
       const id = member._id;
+      this.members.splice(index, 1);
+
       const url = `http://localhost:9090/delete/?id=${id}`;
       fetch(url, {
         method: "DELETE"
