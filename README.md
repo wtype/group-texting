@@ -35,8 +35,10 @@ yarn serve
 - [x] Basic checks to front and back added
 - [x] Tested
 - [x] nedb added / local
-- [ ] Add directory CRUD
+- [x] Add directory CRUD
 - [ ] Replies / back and forth messaging
-- [ ] Routing
+- [x] Routing
 - [ ] Authentication
 - [ ] Build / Deploy
+
+![Screenshot - Vue Text App](/group-texting-vue/Screenshot.jpg)
