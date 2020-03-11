@@ -1,52 +1,45 @@
 <template>
-  <main>
+  <div>
     <header>
       <nav>
         <ul>
           <li>
-            <router-link
-              :to="{ 
-                name: 'Home',
-                params: { members }     
-            }"
-            >Message</router-link>
+            <a @click.prevent="currentComponent = 'Message'" href>Message</a>
           </li>
           <li>
-            <router-link
-              :to="{ 
-                name: 'Directory',
-                params: { members }
-             }"
-            >Directory</router-link>
+            <a @click.prevent="currentComponent = 'Directory'" href>Directory</a>
           </li>
         </ul>
       </nav>
     </header>
-    <router-view></router-view>
-  </main>
+    <keep-alive>
+      <component :is="currentComponent" :members="members" :membersToText="membersToText">
+        <h1>{{ currentComponent }}</h1>
+      </component>
+    </keep-alive>
+  </div>
 </template>
 
 <script>
-import { eventBus } from "./main";
+import Message from "./components/Message";
+import Directory from "./components/Directory";
 
 export default {
+  name: "App",
+  components: {
+    Message,
+    Directory
+  },
   data() {
     return {
-      members: []
+      currentComponent: "Message",
+      members: [],
+      membersToText: []
     };
   },
   created() {
-    eventBus.$on("newMember", () => {
-      this.loadMembers();
-    });
-    eventBus.$on("membersLoaded", members => {
-      this.members = members;
-    });
-  },
-  mounted() {
-    if (this.members.length < 1) {
-      this.loadMembers();
-    }
+    this.loadMembers();
+    this.$on("updateMembers", () => this.loadMembers());
   },
   methods: {
     loadMembers() {
@@ -54,12 +47,8 @@ export default {
       fetch(url)
         .then(response => response.json())
         .then(members => {
-          this.members.splice(0, this.members.length);
-          members.forEach(member => {
-            this.members.push(member);
-          });
+          this.members = members;
         });
-      eventBus.$emit("membersLoaded", this.members);
     }
   }
 };

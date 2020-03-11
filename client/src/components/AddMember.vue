@@ -12,20 +12,18 @@
         minlength="10"
         required
       />
-      <button type="submit">Add Member</button>
+      <button type="submit">Add</button>
     </form>
   </section>
 </template>
 
 <script>
-import { eventBus } from "../main";
-
 export default {
+  props: ["members"],
   data() {
     return {
       name: "",
-      phone: "",
-      members: this.$route.params.members
+      phone: ""
     };
   },
   watch: {
@@ -70,8 +68,9 @@ export default {
         }
       })
         .then(response => response.json())
-        .then(result => {
-          eventBus.$emit("newMember", result);
+        .then(member => {
+          this.$emit("updateMembers", member);
+          this.members.push(member);
           this.name = "";
           this.phone = "";
         })

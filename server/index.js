@@ -60,11 +60,6 @@ app.delete('/delete', (req, res) => {
   }
 });
 
-// app.get('/', (req, res) => {
-//   const { id } = req.query;
-//   directory.update({ id })
-// });
-
 app.use(
   rateLimit({
     windowMs: 30e3,

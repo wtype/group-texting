@@ -13,7 +13,7 @@
           <td>{{name}}</td>
           <td>{{phone}}</td>
         </tr>
-        <tr v-for="(member, index) in members" :index="index" :key="member.phone">
+        <tr v-for="(member, index) in members" :key="member.phone">
           <td>{{member.name}}</td>
           <td>{{member.phone}}</td>
           <td v-if="member.dateAdded" class="remove" @click="removeMember(member, index)">╳</td>
@@ -25,21 +25,17 @@
 
 <script>
 import AddMember from "./AddMember";
-import { eventBus } from "../main";
 
 export default {
+  props: ["members"],
   data() {
     return {
       name: "",
-      phone: "",
-      members: this.$route.params.members
+      phone: ""
     };
   },
-  components: { AddMember },
-  created() {
-    eventBus.$on("membersLoaded", members => {
-      this.members = members;
-    });
+  components: {
+    AddMember
   },
   methods: {
     nameChanged(value) {
@@ -57,7 +53,7 @@ export default {
         method: "DELETE"
       })
         .then(() => {
-          eventBus.$emit("updateMembers", this.members);
+          this.$emit("updateMembers", this.members);
         })
         .catch(err => console.log(err));
     }

@@ -8,20 +8,27 @@
         @click="removeMember(member)"
       >{{member.name}}</li>
     </ul>
-    <button class="little" @click="$emit('removeAll')">Remove all</button>
+    <button class="little" @click="removeAll">Remove all</button>
   </section>
 </template>
 
 <script>
 export default {
-  props: ["membersToText"],
+  props: ["members", "membersToText"],
   data() {
     return {};
   },
   methods: {
     removeMember(member) {
-      this.$emit("removeMember", member);
       member.addedToText = false;
+      const index = this.membersToText.indexOf(member);
+      this.membersToText.splice(index, 1);
+    },
+    removeAll() {
+      this.membersToText.forEach(member => {
+        member.addedToText = false;
+      });
+      this.membersToText.splice(0, this.membersToText.length);
     }
   }
 };

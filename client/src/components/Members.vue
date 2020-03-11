@@ -6,7 +6,7 @@
         v-for="member in members"
         :class="member.addedToText ? 'added' : null"
         :key="member.phone"
-        @click="addMemberToText(member)"
+        @click="addMember(member)"
       >{{member.name}}</li>
     </ul>
     <button class="little" @click="addAll">Add all</button>
@@ -15,18 +15,21 @@
 
 <script>
 export default {
-  props: ["members"],
+  props: ["members", "membersToText"],
   data() {
     return {};
   },
   methods: {
-    addMemberToText(member) {
-      this.$emit("addMember", member);
+    addMember(member) {
+      if (this.membersToText.includes(member)) {
+        return;
+      }
       member.addedToText = true;
+      this.membersToText.push(member);
     },
     addAll() {
       this.members.forEach(member => {
-        this.addMemberToText(member);
+        this.addMember(member);
         member.addedToText = true;
       });
     }

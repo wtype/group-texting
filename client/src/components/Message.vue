@@ -1,29 +1,40 @@
 <template>
-  <section>
-    <form>
-      <textarea
-        name="message"
-        v-model="message"
-        maxlength="1000"
-        rows="10"
-        placeholder="Enter text message here..."
-        type="text"
-      ></textarea>
-      <button
-        v-if="membersToText.length > 0 && message.length > 0"
-        type="submit"
-        @click.prevent="sendMessage"
-      >Send</button>
-      <small v-else-if="membersToText.length > 0">Please add a text message...</small>
-      <small v-else-if="message.length > 0">Please add recipients...</small>
-      <small v-else>Please add recipients and a text message to send a text...</small>
-    </form>
-  </section>
+  <div>
+    <Members :members="members" :membersToText="membersToText" />
+    <Texting :members="members" :membersToText="membersToText" />
+    <section id="textarea">
+      <form>
+        <textarea
+          name="message"
+          v-model="message"
+          maxlength="1000"
+          rows="10"
+          placeholder="Enter text message here..."
+          type="text"
+        ></textarea>
+        <button
+          v-if="membersToText.length > 0 && message.length > 0"
+          type="submit"
+          @click.prevent="sendMessage"
+        >Send</button>
+        <small v-else-if="membersToText.length > 0">Please add a text message...</small>
+        <small v-else-if="message.length > 0">Please add recipients...</small>
+        <small v-else>Please add recipients and a text message to send a text...</small>
+      </form>
+    </section>
+  </div>
 </template>
 
 <script>
+import Members from "./Members";
+import Texting from "./Texting";
+
 export default {
-  props: ["membersToText"],
+  props: ["members", "membersToText"],
+  components: {
+    Members,
+    Texting
+  },
   data() {
     return {
       message: ""
@@ -31,16 +42,30 @@ export default {
   },
   methods: {
     sendMessage() {
-      this.$emit("sendMessage", this.message);
-      document.querySelector("form").reset();
-      this.message = "";
+      const url = "http://localhost:9090/send";
+      const payload = {
+        message: this.message,
+        members: this.membersToText
+      };
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+        .then(() => {})
+        .catch(err => console.log(err));
+
+      this.membersToText.forEach(member => (member.addedToText = false));
+      this.membersToText.splice(0, this.membersToText.length);
     }
   }
 };
 </script>
 
 <style scoped>
-section {
+#textarea {
   padding: 0;
   background: none;
 }
