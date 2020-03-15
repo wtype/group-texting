@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AddMember @nameChanged="nameChanged" @phoneChanged="phoneChanged" />
+    <AddMember />
     <section>
       <h1>Directory</h1>
       <table>
@@ -10,13 +10,13 @@
           <th id="remove">Remove</th>
         </tr>
         <tr v-if="name.length > 0 || phone.length > 0">
-          <td>{{name}}</td>
-          <td>{{phone}}</td>
+          <td>{{ name }}</td>
+          <td>{{ phone }}</td>
         </tr>
         <tr v-for="(member, index) in members" :key="member.phone">
-          <td>{{member.name}}</td>
-          <td>{{member.phone}}</td>
-          <td v-if="member.dateAdded" class="remove" @click="removeMember(member, index)">╳</td>
+          <td>{{ member.name }}</td>
+          <td>{{ member.phone }}</td>
+          <td v-if="member.dateAdded" class="remove" @click="removeMember({ member, index })">╳</td>
         </tr>
       </table>
     </section>
@@ -25,38 +25,16 @@
 
 <script>
 import AddMember from "./AddMember";
+import { mapState, mapActions } from "vuex";
 
 export default {
-  props: ["members"],
-  data() {
-    return {
-      name: "",
-      phone: ""
-    };
-  },
   components: {
     AddMember
   },
-  methods: {
-    nameChanged(value) {
-      this.name = value;
-    },
-    phoneChanged(value) {
-      this.phone = value;
-    },
-    removeMember(member, index) {
-      const id = member._id;
-      this.members.splice(index, 1);
-
-      const url = `http://localhost:9090/delete/?id=${id}`;
-      fetch(url, {
-        method: "DELETE"
-      })
-        .then(() => {
-          this.$emit("updateMembers", this.members);
-        })
-        .catch(err => console.log(err));
-    }
+  computed: mapState(["members", "name", "phone"]),
+  methods: mapActions(["updateMembers", "removeMember"]),
+  created() {
+    this.$store.dispatch("loadMembers");
   }
 };
 </script>

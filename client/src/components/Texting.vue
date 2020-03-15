@@ -2,35 +2,18 @@
   <section>
     <h1>Texting</h1>
     <ul>
-      <li
-        v-for="member in membersToText"
-        :key="member.phone"
-        @click="removeMember(member)"
-      >{{member.name}}</li>
+      <li v-for="member in membersToText" :key="member.phone" @click="removeMember(member)">{{ member.name }}</li>
     </ul>
-    <button class="little" @click="removeAll">Remove all</button>
+    <button class="little" @click="removeAllMembers">Remove all</button>
   </section>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+
 export default {
-  props: ["members", "membersToText"],
-  data() {
-    return {};
-  },
-  methods: {
-    removeMember(member) {
-      member.addedToText = false;
-      const index = this.membersToText.indexOf(member);
-      this.membersToText.splice(index, 1);
-    },
-    removeAll() {
-      this.membersToText.forEach(member => {
-        member.addedToText = false;
-      });
-      this.membersToText.splice(0, this.membersToText.length);
-    }
-  }
+  computed: mapState(["members", "membersToText"]),
+  methods: mapMutations(["removeMember", "removeAllMembers"])
 };
 </script>
 

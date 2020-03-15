@@ -13,7 +13,7 @@
       </nav>
     </header>
     <keep-alive>
-      <component :is="currentComponent" :members="members" :membersToText="membersToText">
+      <component :is="currentComponent">
         <h1>{{ currentComponent }}</h1>
       </component>
     </keep-alive>
@@ -23,6 +23,7 @@
 <script>
 import Message from "./components/Message";
 import Directory from "./components/Directory";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -32,23 +33,14 @@ export default {
   },
   data() {
     return {
-      currentComponent: "Message",
-      members: [],
-      membersToText: []
+      currentComponent: "Message"
     };
   },
+  computed: mapState(["members", "membersToText"]),
+  methods: mapActions(["loadMembers", "updateMembers"]),
   created() {
-    this.loadMembers();
-    this.$on("updateMembers", () => this.loadMembers());
-  },
-  methods: {
-    loadMembers() {
-      const url = "http://localhost:9090/directory";
-      fetch(url)
-        .then(response => response.json())
-        .then(members => {
-          this.members = members;
-        });
+    if (!this.members) {
+      this.loadMembers();
     }
   }
 };

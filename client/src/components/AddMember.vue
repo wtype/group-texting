@@ -1,83 +1,40 @@
 <template>
   <section>
     <h1>Add Member</h1>
-    <form @submit.prevent="addMember">
+    <form @submit.prevent="addMemberToDirectory">
       <input name="name" v-model="name" type="text" placeholder="Name" maxlength="50" required />
-      <input
-        name="phone"
-        v-model="phone"
-        type="text"
-        placeholder="Number"
-        maxlength="10"
-        minlength="10"
-        required
-      />
+      <input name="phone" v-model="phone" type="text" placeholder="Number" maxlength="10" minlength="10" required />
       <button type="submit">Add</button>
     </form>
   </section>
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations } from "vuex";
+
 export default {
-  props: ["members"],
-  data() {
-    return {
-      name: "",
-      phone: ""
-    };
-  },
-  watch: {
-    name(value) {
-      this.$emit("nameChanged", value);
+  computed: {
+    name: {
+      get() {
+        return this.$store.state.name;
+      },
+      set(value) {
+        this.$store.commit("setName", value);
+      }
     },
-    phone(value) {
-      this.$emit("phoneChanged", value);
-    }
+    phone: {
+      get() {
+        return this.$store.state.phone;
+      },
+      set(value) {
+        this.$store.commit("setPhone", value);
+      }
+    },
+    ...mapState(["members"])
   },
   methods: {
-    isNumber(input) {
-      const regex = /[0-9]/g;
-      const found = input.toString().match(regex);
-      if (found === null) {
-        return false;
-      }
-      if (found.length === input.length) {
-        return true;
-      }
-    },
-    addMember() {
-      const url = "http://localhost:9090/directory";
-
-      if (!this.isNumber(this.phone)) {
-        alert(
-          "Please enter a valid number: no characters, parantheses, or dashes"
-        );
-        return;
-      }
-
-      const info = {
-        name: this.name,
-        phone: this.phone
-      };
-
-      fetch(url, {
-        method: "POST",
-        body: JSON.stringify(info),
-        headers: {
-          "content-type": "application/json"
-        }
-      })
-        .then(response => response.json())
-        .then(member => {
-          this.$emit("updateMembers", member);
-          this.members.push(member);
-          this.name = "";
-          this.phone = "";
-        })
-        .catch(err => console.log(err));
-
-      document.querySelector("form").reset();
-    }
+    ...mapMutations(["setName", "setPhone"]),
+    ...mapActions(["addMemberToDirectory"])
   }
 };
 </script>

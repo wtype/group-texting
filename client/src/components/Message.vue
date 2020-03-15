@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Members :members="members" :membersToText="membersToText" />
-    <Texting :members="members" :membersToText="membersToText" />
+    <Members />
+    <Texting />
     <section id="textarea">
-      <form>
+      <form @submit.prevent="sendMessage">
         <textarea
           name="message"
           v-model="message"
@@ -12,11 +12,9 @@
           placeholder="Enter text message here..."
           type="text"
         ></textarea>
-        <button
-          v-if="membersToText.length > 0 && message.length > 0"
-          type="submit"
-          @click.prevent="sendMessage"
-        >Send</button>
+        <button v-if="membersToText.length > 0 && message.length > 0" type="submit">
+          Send
+        </button>
         <small v-else-if="membersToText.length > 0">Please add a text message...</small>
         <small v-else-if="message.length > 0">Please add recipients...</small>
         <small v-else>Please add recipients and a text message to send a text...</small>
@@ -28,39 +26,25 @@
 <script>
 import Members from "./Members";
 import Texting from "./Texting";
+import { mapState, mapActions } from "vuex";
 
 export default {
-  props: ["members", "membersToText"],
   components: {
     Members,
     Texting
   },
-  data() {
-    return {
-      message: ""
-    };
+  computed: {
+    message: {
+      get() {
+        return this.$store.state.message;
+      },
+      set(value) {
+        this.$store.commit("setMessage", value);
+      }
+    },
+    ...mapState(["members", "membersToText"])
   },
-  methods: {
-    sendMessage() {
-      const url = "http://localhost:9090/send";
-      const payload = {
-        message: this.message,
-        members: this.membersToText
-      };
-      fetch(url, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "content-type": "application/json"
-        }
-      })
-        .then(() => {})
-        .catch(err => console.log(err));
-
-      this.membersToText.forEach(member => (member.addedToText = false));
-      this.membersToText.splice(0, this.membersToText.length);
-    }
-  }
+  methods: mapActions(["sendMessage"])
 };
 </script>
 

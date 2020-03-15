@@ -7,32 +7,25 @@
         :class="member.addedToText ? 'added' : null"
         :key="member.phone"
         @click="addMember(member)"
-      >{{member.name}}</li>
+      >
+        {{ member.name }}
+      </li>
     </ul>
-    <button class="little" @click="addAll">Add all</button>
+    <button class="little" @click="addAllMembers">Add all</button>
   </section>
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from "vuex";
+
 export default {
-  props: ["members", "membersToText"],
-  data() {
-    return {};
-  },
+  computed: mapState(["members"]),
   methods: {
-    addMember(member) {
-      if (this.membersToText.includes(member)) {
-        return;
-      }
-      member.addedToText = true;
-      this.membersToText.push(member);
-    },
-    addAll() {
-      this.members.forEach(member => {
-        this.addMember(member);
-        member.addedToText = true;
-      });
-    }
+    ...mapMutations(["addMember", "addAllMembers"]),
+    ...mapActions(["loadMembers"])
+  },
+  created() {
+    this.loadMembers();
   }
 };
 </script>
