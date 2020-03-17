@@ -40,6 +40,7 @@ yarn serve
 - [x] nedb added / local
 - [x] Add directory CRUD
 - [ ] Replies / back and forth messaging
+- [ ] Message archive
 - [x] Routing
 - [ ] Authentication
 - [ ] Build / Deploy
