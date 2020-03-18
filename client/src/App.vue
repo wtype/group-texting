@@ -9,6 +9,9 @@
           <li>
             <a @click.prevent="currentComponent = 'Directory'">Directory</a>
           </li>
+          <li>
+            <a @click.prevent="currentComponent = 'Messages'">Messages</a>
+          </li>
         </ul>
       </nav>
     </header>
@@ -23,13 +26,15 @@
 <script>
 import Message from "./components/Message";
 import Directory from "./components/Directory";
+import Messages from "./components/Messages";
 import { mapState, mapActions } from "vuex";
 
 export default {
   name: "App",
   components: {
     Message,
-    Directory
+    Directory,
+    Messages
   },
   data() {
     return {
