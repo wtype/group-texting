@@ -4,10 +4,10 @@
       <nav>
         <ul>
           <li>
-            <a @click.prevent="currentComponent = 'Message'" href>Message</a>
+            <a @click.prevent="currentComponent = 'Message'">Message</a>
           </li>
           <li>
-            <a @click.prevent="currentComponent = 'Directory'" href>Directory</a>
+            <a @click.prevent="currentComponent = 'Directory'">Directory</a>
           </li>
         </ul>
       </nav>
