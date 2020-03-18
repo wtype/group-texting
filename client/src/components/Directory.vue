@@ -16,7 +16,7 @@
         <tr v-for="(member, index) in members" :key="member.phone">
           <td>{{ member.name }}</td>
           <td>{{ member.phone }}</td>
-          <td v-if="member.dateAdded" class="remove" @click="removeMember({ member, index })">╳</td>
+          <td v-if="member.dateAdded" class="remove" @click="deleteMember({ member, index })">╳</td>
         </tr>
       </table>
     </section>
@@ -32,10 +32,7 @@ export default {
     AddMember
   },
   computed: mapState(["members", "name", "phone"]),
-  methods: mapActions(["updateMembers", "removeMember"]),
-  created() {
-    this.$store.dispatch("loadMembers");
-  }
+  methods: mapActions(["deleteMember"])
 };
 </script>
 

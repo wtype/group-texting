@@ -1,43 +1,43 @@
-const express = require("express");
-const cors = require("cors");
-const rateLimit = require("express-rate-limit");
-const Filter = require("bad-words");
-const Datastore = require("nedb");
+const express = require('express');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const Filter = require('bad-words');
+const Datastore = require('nedb');
 
 const port = process.env.PORT || 9090;
 const app = express();
 const filter = new Filter();
 
-const db = new Datastore("texts.db");
+const db = new Datastore('texts.db');
 db.loadDatabase();
 
-const directory = new Datastore("directory.db");
+const directory = new Datastore('directory.db');
 directory.loadDatabase();
 
 app.use(cors());
-app.use(express.json({ limit: "2kb" }));
+app.use(express.json({ limit: '2kb' }));
 
-require("dotenv").config();
+require('dotenv').config();
 
 const accountSid = process.env.ACCOUNTSID;
 const authToken = process.env.AUTHTOKEN;
 
-const client = require("twilio")(accountSid, authToken);
+const client = require('twilio')(accountSid, authToken);
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.json({
-    Welcome: "🕊"
+    Welcome: '🕊',
   });
 });
 
-app.get("/directory", (req, res) => {
+app.get('/directory', (req, res) => {
   directory
     .find({})
     .sort({ created: -1 })
     .exec((err, data) => {
       if (err) {
         res.json({
-          error: "Nothing in the directory! 😿"
+          error: 'Nothing in the directory! 😿',
         });
         res.end();
         return;
@@ -46,16 +46,16 @@ app.get("/directory", (req, res) => {
     });
 });
 
-app.delete("/delete", (req, res) => {
+app.delete('/delete', (req, res) => {
   const { id } = req.query;
   if (id) {
     directory.remove({ _id: id });
     res.json({
-      message: "Successfully removed"
+      message: 'Successfully removed',
     });
   } else {
     res.status(404).json({
-      error: "Entry not found"
+      error: 'Entry not found',
     });
   }
 });
@@ -63,14 +63,14 @@ app.delete("/delete", (req, res) => {
 app.use(
   rateLimit({
     windowMs: 30e3,
-    max: 3
+    max: 3,
   })
 );
 
 function isValidText(info) {
   return (
     info.message &&
-    info.message.toString().trim() !== "" &&
+    info.message.toString().trim() !== '' &&
     info.members &&
     info.members.length > 0 &&
     info.members.length < 50
@@ -78,14 +78,19 @@ function isValidText(info) {
 }
 
 function isValidMember(info) {
-  return info.name && info.name.toString().trim() !== "" && info.phone && info.phone.toString().trim() !== "";
+  return (
+    info.name &&
+    info.name.toString().trim() !== '' &&
+    info.phone &&
+    info.phone.toString().trim() !== ''
+  );
 }
 
-app.post("/send", (req, res) => {
+app.post('/send', (req, res) => {
   if (isValidText(req.body)) {
     const text = {
       message: filter.clean(req.body.message.toString()),
-      members: req.body.members
+      members: req.body.members,
     };
 
     let numbers = [];
@@ -99,41 +104,43 @@ app.post("/send", (req, res) => {
         client.messages.create({
           body: text.message,
           from: process.env.TWILIONUM,
-          to: number
+          to: number,
         })
       )
     )
       .then(() => {
         db.insert(text);
-        console.log(text.message, "messages sent to", text.members);
+        console.log(text.message, 'messages sent to', text.members);
         numbers = [];
         res.status(200).json({
-          success: "Successfully sent the message!"
+          success: 'Successfully sent the message!',
         });
       })
       .catch(err => console.log(err));
   } else {
     res.status(422).json({
-      message: "Please provide valid text content and members"
+      message: 'Please provide valid text content and members',
     });
   }
 });
 
-app.post("/directory", (req, res) => {
+app.post('/directory', (req, res) => {
   if (isValidMember(req.body)) {
     const member = {
       name: filter.clean(req.body.name.toString().toLowerCase()),
       phone: `+1${req.body.phone}`,
       dateAdded: new Date(),
-      addedToText: false
+      addedToText: false,
     };
     directory.insert(member);
     res.json(member);
   } else {
     res.status(422).json({
-      message: "Please provide valid member information"
+      message: 'Please provide valid member information',
     });
   }
 });
 
-app.listen(port, () => console.log(`App listening on http://localhost:${port}`));
+app.listen(port, () =>
+  console.log(`App listening on http://localhost:${port}`)
+);

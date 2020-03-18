@@ -3,7 +3,15 @@
     <h1>Add Member</h1>
     <form @submit.prevent="addMemberToDirectory">
       <input name="name" v-model="name" type="text" placeholder="Name" maxlength="50" required />
-      <input name="phone" v-model="phone" type="text" placeholder="Number" maxlength="10" minlength="10" required />
+      <input
+        name="phone"
+        v-model="phone"
+        type="text"
+        placeholder="Number"
+        maxlength="10"
+        minlength="10"
+        required
+      />
       <button type="submit">Add</button>
     </form>
   </section>

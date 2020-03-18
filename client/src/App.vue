@@ -37,11 +37,9 @@ export default {
     };
   },
   computed: mapState(["members", "membersToText"]),
-  methods: mapActions(["loadMembers", "updateMembers"]),
+  methods: mapActions(["loadMembers"]),
   created() {
-    if (!this.members) {
-      this.loadMembers();
-    }
+    this.loadMembers();
   }
 };
 </script>

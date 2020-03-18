@@ -45,6 +45,15 @@ export default new Vuex.Store({
       const index = state.membersToText.indexOf(member);
       state.membersToText.splice(index, 1);
     },
+    deleteMember(state, { member, index }) {
+      state.members.splice(index, 1);
+
+      if (state.membersToText.includes(member)) {
+        member.addedToText = false;
+        const idx = state.membersToText.indexOf(member);
+        state.membersToText.splice(idx, 1);
+      }
+    },
     removeAllMembers(state) {
       state.membersToText.forEach(member => (member.addedToText = false));
       state.membersToText.splice(0, state.membersToText.length);
@@ -73,64 +82,56 @@ export default new Vuex.Store({
         headers: {
           "content-type": "application/json"
         }
-      })
-        .then(() => {})
-        .catch(err => console.log(err));
+      }).catch(err => console.log(err));
 
       context.state.membersToText.forEach(member => (member.addedToText = false));
       context.state.membersToText.splice(0, context.state.membersToText.length);
     },
-    removeMember(context, { member, index }) {
-      const id = member._id;
-      context.state.members.splice(index, 1);
-
+    deleteMember({ commit }, { member, index }) {
+      let id = member._id;
       const url = `http://localhost:9090/delete/?id=${id}`;
+
       fetch(url, {
         method: "DELETE"
       })
-        .then(() => {})
+        .then(() => {
+          commit('deleteMember', { member, index });
+        })
         .catch(err => console.log(err));
-    },
-    isNumber(context) {
-      const regex = /[0-9]/g;
-      const found = context.state.phone.toString().match(regex);
-
-      if (found === null) {
-        return false;
-      }
-      if (found.length === context.state.phone.length) {
-        return true;
-      }
     },
     addMemberToDirectory(context) {
       const url = "http://localhost:9090/directory";
 
-      if (!context.dispatch("isNumber")) {
-        alert("Please enter a valid number: no characters, parantheses, or dashes");
-        return;
-      }
+      const regex = /[0-9]/g;
+      const found = context.state.phone.toString().match(regex);
 
-      const info = {
-        name: context.state.name,
-        phone: context.state.phone
-      };
+      if (found.length === context.state.phone.length) {
+        const info = {
+          name: context.state.name,
+          phone: context.state.phone
+        };
 
-      fetch(url, {
-        method: "POST",
-        body: JSON.stringify(info),
-        headers: {
-          "content-type": "application/json"
-        }
-      })
-        .then(response => response.json())
-        .then(member => {
-          context.state.members.push(member);
-          context.state.name = "";
-          context.state.phone = "";
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify(info),
+          headers: {
+            "content-type": "application/json"
+          }
         })
-        .catch(err => console.log(err));
+          .then(response => response.json())
+          .then(member => {
+            context.state.members.push(member);
+            context.state.name = "";
+            context.state.phone = "";
+            context.dispatch('loadMembers');
+          })
+          .catch(err => console.log(err));
 
-      document.querySelector("form").reset();
+        document.querySelector("form").reset();
+      }
+      else {
+        alert('Please enter a valid number: no characters, parantheses, or dashes');
+      }
     }
   }
 });
