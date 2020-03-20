@@ -2,7 +2,7 @@
 
 A group SMS app built with Vue, Node/Express, and Twilio. Current version allows for sending a message to a people listed in the directory.
 
-## Getting Started
+## Getting Started 📱
 
 Using this app will require a Twilio account and a .env file with account details and a verified number.
 
