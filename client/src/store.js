@@ -104,8 +104,15 @@ export default new Vuex.Store({
 
       const regex = /[0-9]/g;
       const found = context.state.phone.toString().match(regex);
+      let alreadyAdded = false;
 
-      if (found.length === context.state.phone.length) {
+      if (context.state.members.find(member => member.phone === `+1${context.state.phone}`)) {
+        alreadyAdded = true;
+        alert('This phone number already exists.');
+        return;
+      }
+
+      if (found.length === context.state.phone.length && !alreadyAdded) {
         const info = {
           name: context.state.name,
           phone: context.state.phone

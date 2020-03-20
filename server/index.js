@@ -46,6 +46,21 @@ app.get('/directory', (req, res) => {
     });
 });
 
+app.get('/texts', (req, res) => {
+  db.find({})
+    .sort({ created: -1 })
+    .exec((err, data) => {
+      if (err) {
+        res.json({
+          error: 'Nothing in the text history! 😿',
+        });
+        res.end();
+        return;
+      }
+      res.json(data);
+    });
+});
+
 app.delete('/delete', (req, res) => {
   const { id } = req.query;
   if (id) {
@@ -91,6 +106,7 @@ app.post('/send', (req, res) => {
     const text = {
       message: filter.clean(req.body.message.toString()),
       members: req.body.members,
+      dateSent: new Date().toLocaleString(),
     };
 
     let numbers = [];
@@ -116,7 +132,7 @@ app.post('/send', (req, res) => {
           success: 'Successfully sent the message!',
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err.message, err));
   } else {
     res.status(422).json({
       message: 'Please provide valid text content and members',
