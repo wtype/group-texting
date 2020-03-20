@@ -1,4 +1,4 @@
-# Text Messaging With Vue
+# Text Messaging With Vue and Twilio API
 
 A group SMS app built with Vue, Node/Express, and Twilio. Current version allows for sending a message to a people listed in the directory.
 
