@@ -43,3 +43,9 @@ yarn serve
 - [ ] Replies / back and forth messaging
 - [ ] Authentication ?
 - [ ] Build / Deploy
+
+## More Examples
+
+![Screenshot2 - Vue Text App](/Screenshot2.jpg)
+
+![Screenshot3 - Vue Text App](/Screenshot3.jpg)
