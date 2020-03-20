@@ -72,7 +72,7 @@ tr {
   font-size: 1rem;
 }
 td span {
-  margin-right: 5px;
+  margin-right: 0.25rem;
   text-transform: capitalize !important;
 }
 td span::after {

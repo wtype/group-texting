@@ -26,7 +26,6 @@ yarn serve
 
 ![Screenshot - Vue Text App](/Screenshot.jpg)
 
-
 ## To Do
 
 - [x] Client started with Vue
@@ -39,8 +38,8 @@ yarn serve
 - [x] Tested
 - [x] nedb added / local
 - [x] Add directory CRUD
-- [ ] Replies / back and forth messaging
 - [x] Message archive
 - [x] Routing
-- [ ] Authentication
+- [ ] Replies / back and forth messaging
+- [ ] Authentication ?
 - [ ] Build / Deploy
