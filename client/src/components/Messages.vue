@@ -64,7 +64,6 @@ table {
 th,
 td,
 tr {
-  text-transform: capitalize;
   padding: 0.65rem;
   text-align: left;
   font-size: 1.5rem;
@@ -73,7 +72,6 @@ tr {
 }
 td span {
   margin-right: 0.25rem;
-  text-transform: capitalize !important;
 }
 td span::after {
   content: ",";
