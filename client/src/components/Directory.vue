@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import AddMember from "./AddMember";
 import { mapState, mapActions } from "vuex";
+import AddMember from "./AddMember";
 
 export default {
   components: {

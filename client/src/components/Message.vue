@@ -12,9 +12,7 @@
           placeholder="Enter text message here..."
           type="text"
         ></textarea>
-        <button v-if="membersToText.length > 0 && message.length > 0" type="submit">
-          Send
-        </button>
+        <button v-if="membersToText.length > 0 && message.length > 0" type="submit">Send</button>
         <small v-else-if="membersToText.length > 0">Please add a text message...</small>
         <small v-else-if="message.length > 0">Please add recipients...</small>
         <small v-else>Please add recipients and a text message to send a text...</small>
@@ -24,9 +22,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import Members from "./Members";
 import Texting from "./Texting";
-import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
