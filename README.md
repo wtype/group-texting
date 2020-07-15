@@ -40,11 +40,12 @@ yarn serve
 - [x] Add directory CRUD
 - [x] Message archive
 - [x] Routing
+- [ ] Error Handling – which messages failed (Twil error codes)
 - [ ] Replies / back and forth messaging
 - [ ] Authentication ?
 - [ ] Build / Deploy
 
-## More Examples
+### More Examples
 
 ![Screenshot2 - Vue Text App](/Screenshot2.jpg)
 
