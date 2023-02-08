@@ -137,7 +137,7 @@ export default new Vuex.Store({
         document.querySelector("form").reset();
       }
       else {
-        alert('Please enter a valid number: no characters, parantheses, or dashes');
+        alert('Please enter a valid number: no characters, parenthesis, or dashes');
       }
     }
   }
